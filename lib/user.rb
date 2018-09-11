@@ -7,6 +7,10 @@ class User < ActiveRecord::Base
 
    def play_song(song)
     Play.create(user_id:self.id, song_id:song.id)
+    # puts "Mmmbop, ba duba dop
+    # Ba du bop, ba duba dop
+    # Ba du bop, ba duba dop
+    # Ba du, yeah!!!"
    end 
 
    def follow_playlist(playlist)
