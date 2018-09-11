@@ -1,4 +1,4 @@
-class Plays < ActiveRecord::Base
+class Play < ActiveRecord::Base
     belongs_to :user
     belongs_to :song
 end

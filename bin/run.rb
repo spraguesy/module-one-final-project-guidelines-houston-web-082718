@@ -23,15 +23,18 @@ RSpotify.authenticate(client_id, client_secret)
 
 drake = RSpotify::Artist.search('Drake')
 
-User.create(name: "Andrew")
+andrew = User.create(name: "Andrew")
 User.create(name: "Nick")
 User.create(name: "John")
 User.create(name: "Graham")
 User.create(name: "Kim")
 
-Song.add_song('Hotline Bling')
+hotline = Song.add_song('Hotline Bling')
 
 playlist1 = Playlist.create(name: "Andrew's Playlist", user_id: User.all.first.id)
+
+andrew.play_song(hotline)
+andrew.follow_playlist(playlist1)
 
 
 

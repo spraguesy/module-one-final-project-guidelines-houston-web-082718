@@ -5,8 +5,12 @@ class User < ActiveRecord::Base
    has_many :plays
    has_many :songs, through: :plays 
 
-   def self.play_song(song)
-    
+   def play_song(song)
+    Play.create(user_id:self.id, song_id:song.id)
+   end 
+
+   def follow_playlist(playlist)
+    Follow.create(user_id:self.id, playlist_id:playlist.id)
    end 
 
 end
