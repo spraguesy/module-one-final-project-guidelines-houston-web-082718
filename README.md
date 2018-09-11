@@ -55,3 +55,26 @@ Projects need to be approved prior to launching into them, so take some time to 
 # in config/environment.rb add this line:
 ActiveRecord::Base.logger = nil
 ```
+
+Datebase
+
+    Playlists (has owner)
+    Users
+    song
+    Artists
+
+
+Join
+
+    Subsribers and Playlist
+    Users and Songs
+    Songs and Playlists
+    Artists and Songs
+
+Questions
+
+    - Most followed Playlist
+    - Songs that a user hasn't listened to on a Playlist
+    - Most played songs by Users/user
+    - Most danceable playlist
+    - Generate playlist off of artist
