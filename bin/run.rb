@@ -1,19 +1,17 @@
 require_relative '../config/environment'
 
 
+Playlist.create(name: "90s", user_id:1)
+User.create(name: "Andrew")
+User.create(name: "Jordan")
+User.create(name: "Nick")
+follow_1 = Follow.create()
+follow_2 = Follow.create()
+User.all.first.follows << follow_1
+Playlist.all.first.follows << follow_1
 
-puts "HELLO WORLD"
-
-client_id = 'e52b827036954bfbb37666dc62aebd80'
-client_secret = '3d61a827a64c438fb9fbf806742d24da'
-
-RSpotify.authenticate(client_id, client_secret)
-
-me = RSpotify::User.find('y80ck1c8ljgnpwvj1au735a11')
-
-tracks = RSpotify::Track.search('Nice for what')
-# artists = RSpotify::Artist.search(limit: 10)
-
-featured = RSpotify::Playlist.browse_featured
 
 binding.pry
+
+
+puts "HELLO WORLD"
