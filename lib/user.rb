@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
    has_many :plays
    has_many :songs, through: :plays 
 
-   
+   def self.play_song(song)
+    
+   end 
 
 end

@@ -31,6 +31,8 @@ User.create(name: "Kim")
 
 Song.add_song('Hotline Bling')
 
+playlist1 = Playlist.create(name: "Andrew's Playlist", user_id: User.all.first.id)
+
 
 
 # in_my_feelings = RSpotify::Song.search('In my feelings')

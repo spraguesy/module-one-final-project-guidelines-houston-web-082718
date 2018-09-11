@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180911192800) do
+ActiveRecord::Schema.define(version: 20180911220337) do
 
-  create_table "artists", force: :cascade do |t|
+  create_table "artists", id: :string, force: :cascade do |t|
     t.string  "name"
     t.integer "popularity"
+    t.index ["id"], name: "sqlite_autoindex_artists_1", unique: true
   end
 
   create_table "follows", force: :cascade do |t|
@@ -37,11 +38,18 @@ ActiveRecord::Schema.define(version: 20180911192800) do
     t.index ["user_id"], name: "index_playlists_on_user_id"
   end
 
+  create_table "plays", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "song_id"
+    t.index ["song_id"], name: "index_plays_on_song_id"
+    t.index ["user_id"], name: "index_plays_on_user_id"
+  end
+
   create_table "songs", force: :cascade do |t|
     t.string  "name"
     t.integer "popularity"
     t.float   "danceability"
-    t.integer "artist_id"
+    t.string  "artist_id"
     t.index ["artist_id"], name: "index_songs_on_artist_id"
   end
 
