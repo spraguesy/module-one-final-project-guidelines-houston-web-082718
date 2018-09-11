@@ -5,7 +5,10 @@ class Playlist < ActiveRecord::Base
     belongs_to :user
 
     has_many :follows
-    has_many :users, through: :follows
+    has_many :followers
+    has_many :users, :as => :followers, through: :follows
+
+    alias_attribute :followers, :users
 
     
 end

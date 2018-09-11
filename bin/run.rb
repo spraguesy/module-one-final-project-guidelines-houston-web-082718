@@ -1,5 +1,8 @@
 require_relative '../config/environment'
 
+Playlist.destroy_all
+User.destroy_all
+Follow.destroy_all
 
 Playlist.create(name: "90s", user_id:1)
 User.create(name: "Andrew")
@@ -9,6 +12,7 @@ follow_1 = Follow.create()
 follow_2 = Follow.create()
 User.all.first.follows << follow_1
 Playlist.all.first.follows << follow_1
+
 
 
 binding.pry
