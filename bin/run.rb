@@ -89,10 +89,54 @@ User.second.play_song(Song.all.third)
 
 def help
     help = <<-HELP 
-        
+        1 - Play a song
+        2 - Display your playlists
+        3 - Find most popular playlist I don't follow
+        4 - Find my most danceable playlist
+        5 - Find songs I haven't listened to
+        6 - Find my most played song
+        7 - Exit
     HELP
 
     puts help
+end
+
+def cli_play_song (user, song_name, song_artist)
+    puts "\n*********************\n"
+    puts "Now playing #{song_name} by #{song_artist}."
+    found_song = Song.find_by(name: song_name)
+    if found_song == nil
+        Song.add_song(song_name)
+        found_song = Song.find_by(name: song_name)
+    end
+    user.play_song(found_song)
+    fetcher = Lyricfy::Fetcher.new(:wikia)
+    song = fetcher.search "#{song_artist}", "#{song_name}"
+    song.lines.each do |line|
+        puts line
+        sleep(0.2)
+    end
+    puts "\n*********************\n\n"
+end
+
+def display_playlists
+    
+end
+
+def most_pop_list_no_follow
+    
+end
+
+def cli_most_danceable_list
+    
+end
+
+def songs_no_listen
+    
+end
+
+def cli_most_played_song
+    
 end
 
 
@@ -101,22 +145,27 @@ def run
     username = gets.capitalize.strip
     current_user = User.find_by(name: username)
     puts "Hey #{current_user.name}. Here is what you can do."
-    help
     input = ""
     while input
-        puts 
-
-
-
-
+        help
+        input = gets.chomp
+        case input
+        when '1'
+            print "What is the song's name? "
+            song_name = gets.chomp.strip
+            print "Who is the Artist? "
+            song_artist = gets.chomp.strip
+            cli_play_song(current_user, song_name, song_artist)
+        when '7'
+            puts "Bye"
+            break
+        else
+            help
+        end
+    end
 end
-
-
-
-
-
 
 binding.pry
 
+run
 
-puts "HELLO WORLD"
