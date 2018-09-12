@@ -10,7 +10,7 @@ class Playlist < ActiveRecord::Base
 
     alias_attribute :followers, :users
 
-    def add_songs_to_playlist(song)
+    def add_song_to_playlist(song)
         PlaylistSong.create(song_id:song.id, playlist_id: self.id)
     end 
 

@@ -78,3 +78,16 @@ Questions
     - Most played songs by Users/user
     - Most danceable playlist
     - Generate playlist off of artist
+
+
+CLI
+    What is your user name?
+    Display number of playlists you follow
+    1) Most popular playlist I don't follow (done)
+    2) Songs I haven't listened to on my playlist (done)
+    3) My most played song
+    4) Most danceable from my playlists
+    5) Display the playlists that I own name
+    6) Display the playlists the I follow
+    7) Add new playlist
+    8) Listen to song and optioin to add it to a playlist
