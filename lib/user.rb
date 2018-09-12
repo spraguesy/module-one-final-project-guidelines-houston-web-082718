@@ -71,4 +71,17 @@ class User < ActiveRecord::Base
         most_danceable
    end
 
+   def all_playlists
+    playlist_array = []
+    self.playlists.each do |play|
+        playlist_array << play
+    end
+
+    self.follows.each do |follow|
+        playlist_array << follow.playlist
+     end
+
+     playlist_array
+   end
+
 end

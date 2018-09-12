@@ -102,7 +102,7 @@ def help
 end
 
 def cli_play_song (user, song_name, song_artist)
-    puts "\n*********************\n"
+    puts "\n\n*********************\n\n"
     puts "Now playing #{song_name} by #{song_artist}."
     found_song = Song.find_by(name: song_name)
     if found_song == nil
@@ -116,11 +116,22 @@ def cli_play_song (user, song_name, song_artist)
         puts line
         sleep(0.2)
     end
-    puts "\n*********************\n\n"
+    puts "\n\n*********************\n\n"
 end
 
-def display_playlists
-    
+def display_playlists (user)
+    puts "\n\n*********************\n\n"
+    puts "Here are your playlists.\n"
+    my_playlists = user.all_playlists
+
+    my_playlists.each do |playlist|
+        if user.owns?(playlist)
+            puts "#{playlist.name} (owner)"
+        else
+            puts "#{playlist.name} (follower)"
+        end
+    end
+    puts "\n\n*********************\n\n"
 end
 
 def most_pop_list_no_follow
@@ -144,7 +155,20 @@ def run
     puts "Welcome to our Spotify Project.\nEnter your Username: "
     username = gets.capitalize.strip
     current_user = User.find_by(name: username)
-    puts "Hey #{current_user.name}. Here is what you can do."
+    if current_user == nil
+        puts "User not found. Do you want to create a new User? (y/n)"
+        input = gets.downcase.chomp
+        if input == 'y' || input == 'yes'
+            puts "Created new user."
+            current_user = User.create(name: username)    
+        else
+            run
+        end
+
+        
+    end
+    puts "\n\n"
+    puts "Hey #{current_user.name}. Here is what you can do.\n\n"
     input = ""
     while input
         help
@@ -156,6 +180,8 @@ def run
             print "Who is the Artist? "
             song_artist = gets.chomp.strip
             cli_play_song(current_user, song_name, song_artist)
+        when '2'
+            display_playlists(current_user)
         when '7'
             puts "Bye"
             break
@@ -165,7 +191,7 @@ def run
     end
 end
 
-binding.pry
+# binding.pry
 
 run
 
