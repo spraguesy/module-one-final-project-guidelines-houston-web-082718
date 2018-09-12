@@ -87,14 +87,29 @@ User.first.play_song(Song.all.third)
 User.second.play_song(Song.all.first)
 User.second.play_song(Song.all.third)
 
+def help
+    help = <<-HELP 
+        
+    HELP
+
+    puts help
+end
+
+
+def run 
+    puts "Welcome to our Spotify Project.\nEnter your Username: "
+    username = gets.capitalize.strip
+    current_user = User.find_by(name: username)
+    puts "Hey #{current_user.name}. Here is what you can do."
+    help
+    input = ""
+    while input
+        puts 
 
 
 
 
-
-
-
-# in_my_feelings = RSpotify::Song.search('In my feelings')
+end
 
 
 

@@ -14,5 +14,10 @@ class Playlist < ActiveRecord::Base
         PlaylistSong.create(song_id:song.id, playlist_id: self.id)
     end 
 
+    def average_danceability
+        dance_array = self.songs.map{|song| song.danceability}
+        dance_array.reduce(:+) / dance_array.length
+    end
+
     
 end
