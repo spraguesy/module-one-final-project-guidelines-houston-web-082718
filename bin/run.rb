@@ -29,12 +29,13 @@ User.create(name: "John")
 User.create(name: "Graham")
 User.create(name: "Kim")
 
-hotline = Song.add_song('Hotline Bling')
+Song.add_song('Hotline Bling')
+Song.add_song("God's Plan")
 
 playlist1 = Playlist.create(name: "Andrew's Playlist", user_id: User.all.first.id)
 
-andrew.play_song(hotline)
-andrew.follow_playlist(playlist1)
+
+
 
 
 
