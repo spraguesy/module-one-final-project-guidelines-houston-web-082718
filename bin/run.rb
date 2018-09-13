@@ -148,9 +148,9 @@ def display_playlists (user)
 
     my_playlists.each do |playlist|
         if user.owns?(playlist)
-            puts "#{playlist.name} (owner)"
+            puts "#{my_playlists.index(playlist)+1}. - #{playlist.name} (owner)"
         else
-            puts "#{playlist.name} (follower)"
+            puts "#{my_playlists.index(playlist)+1}. - #{playlist.name} (follower)"
         end
     end
     puts "\n\n*********************\n\n"
@@ -178,7 +178,21 @@ def cli_most_danceable_list (user)
 end
 
 def songs_no_listen (user)
-    
+
+    display_playlists(user)
+
+    print "Which playlist do you want to see the songs you haven't listened to on? "
+
+    playlist_num = gets.chomp
+
+    not_listened_to = user.songs_not_listened_to_from(user.all_playlists[playlist_num.to_i-1])
+
+    not_listened_to.each do |song|
+        puts "#{not_listened_to.index(song)+1}. #{song.artist.name} - #{song.name} "
+    end
+
+    puts "Here are the song's you haven't listened to on this playlist"
+
 end
 
 def cli_most_played_song
