@@ -93,3 +93,8 @@ CLI
     8) Listen to song and optioin to add it to a playlist
     9) Create a playlist of 10 songs that are the most danceable songs
     10) **** Play a song with the lyrics!!!!
+        a) At the end of the song, say "Mmm that my jam."
+        b) Do you want to:
+            i) Add this song to a playlist? (y/n)
+                1) If yes, what playlist, or new playlist?
+                2) What is the new playlist name?
