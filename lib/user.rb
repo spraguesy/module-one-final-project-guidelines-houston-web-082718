@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
         songs
    end
 
-   def most_played_song
+   def most_played_songs
         most_played = {}
         self.songs.each do |song|     
             if(most_played[song])
@@ -50,7 +50,12 @@ class User < ActiveRecord::Base
                 most_played[song] = 1
             end
         end
-        most_played.key(most_played.values.max)
+        songs = []
+        most_played.each do |key, value|
+            song = {:song => key, :count => value}
+            songs << song
+        end
+        songs.sort{|x,y| y[:count] <=> x[:count]}
    end 
 
    def most_danceable

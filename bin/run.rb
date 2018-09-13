@@ -202,8 +202,21 @@ def songs_no_listen (user)
 
 end
 
-def cli_most_played_song
-    
+def cli_most_played_songs (user)
+    puts "\n\n*********************\n\n"
+    songs = user.most_played_songs
+    if (songs.length < 5) && (songs.length > 0)
+        songs.length.times do |index|
+            puts "#{index+1}. #{songs[index][:song].name} By #{songs[index][:song].artist.name} - Listened #{songs[index][:count]} times."
+        end 
+    elsif songs.length > 5
+        5.times do |index|
+            puts "#{index+1}. #{songs[index][:song].name} By #{songs[index][:song].artist.name} - Listened #{songs[index][:count]} times."
+        end 
+    else
+        puts "You haven't played any songs."
+    end 
+    puts "\n*********************\n\n"
 end
 
 def end_program
@@ -253,6 +266,8 @@ def run
             cli_most_danceable_list(current_user)
         when '5'
             songs_no_listen(current_user)
+        when '6'
+            cli_most_played_songs(current_user)
         when '7'
             end_program
             break
@@ -262,7 +277,7 @@ def run
     end
 end
 
-# binding.pry
+#binding.pry
 
 run
 
