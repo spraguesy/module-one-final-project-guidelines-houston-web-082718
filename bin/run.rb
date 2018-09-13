@@ -73,8 +73,8 @@ tSwift_songs.each do |song|
     Playlist.third.add_song_to_playlist(song)
 end
 
-User.first.follow_playlist(Playlist.fourth)
-# User.second.follow_playlist(Playlist.first)
+# User.first.follow_playlist(Playlist.fourth)
+User.third.follow_playlist(Playlist.fourth)
 User.third.follow_playlist(Playlist.first)
 User.fourth.follow_playlist(Playlist.first)
 User.fifth.follow_playlist(Playlist.first)
@@ -134,8 +134,16 @@ def display_playlists (user)
     puts "\n\n*********************\n\n"
 end
 
-def most_pop_list_no_follow
+def most_pop_list_no_follow(user)
+    puts "\n\n*********************\n\n"
+    binding.pry
+    puts "You don't follow #{user.find_new_popular_playlist.name}. It has #{user.find_new_popular_playlist.followers.size} follower(s)\n\nHere are the songs.\n\n"
+
+    user.find_new_popular_playlist.songs.each do |song|
+        puts "#{user.find_new_popular_playlist.songs.index(song)+1}. - #{song.name}"
+    end
     
+    puts "\n\n*********************\n\n"
 end
 
 def cli_most_danceable_list
@@ -182,6 +190,8 @@ def run
             cli_play_song(current_user, song_name, song_artist)
         when '2'
             display_playlists(current_user)
+        when '3'
+            most_pop_list_no_follow(current_user)
         when '7'
             puts "Bye"
             break
