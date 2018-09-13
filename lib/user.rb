@@ -55,19 +55,12 @@ class User < ActiveRecord::Base
    def most_danceable
         most_dance = 0
         most_danceable = nil
-        self.playlists.each do |play|
+        self.all_playlists.each do |play|
             if play.average_danceability > most_dance
                 most_dance = play.average_danceability
                 most_danceable = play
             end
         end
-
-        self.follows.each do |follow|
-            if follow.playlist.average_danceability > most_dance
-                most_dance = follow.playlist.average_danceability
-                most_danceable = follow.playlist
-            end
-         end
         most_danceable
    end
 

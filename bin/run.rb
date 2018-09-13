@@ -116,7 +116,7 @@ def cli_play_song (user, song_name, song_artist)
         end 
     end
     
-    puts "Now playing #{song_name} by #{song_artist}."
+    puts "\n\nNow playing #{song_name} by #{song_artist}.\n\n"
 
 
     fetcher = Lyricfy::Fetcher.new(:wikia)
@@ -138,12 +138,12 @@ def cli_play_song (user, song_name, song_artist)
     #     end
     # end
 
-    puts "\n\n*********************\n\n"
+    # puts "\n\n*********************\n\n"
 end
 
 def display_playlists (user)
     puts "\n\n*********************\n\n"
-    puts "Here are your playlists.\n"
+    puts "Here are your playlists.\n\n"
     my_playlists = user.all_playlists
 
     my_playlists.each do |playlist|
@@ -154,11 +154,11 @@ def display_playlists (user)
         end
     end
     puts "\n\n*********************\n\n"
+    sleep(10)
 end
 
 def most_pop_list_no_follow(user)
     puts "\n\n*********************\n\n"
-    binding.pry
     puts "You don't follow #{user.find_new_popular_playlist.name}. It has #{user.find_new_popular_playlist.followers.size} follower(s)\n\nHere are the songs.\n\n"
 
     user.find_new_popular_playlist.songs.each do |song|
@@ -168,8 +168,13 @@ def most_pop_list_no_follow(user)
     puts "\n\n*********************\n\n"
 end
 
-def cli_most_danceable_list
-    
+def cli_most_danceable_list (user)
+    puts "\n\n*********************\n\n"
+
+    md = user.most_danceable
+    puts "'#{md.name}' is your most danceable with #{(md.average_danceability*100).to_i}% danceability.\n\nNo one is watching..."
+    puts "\n\n*********************\n\n"
+    sleep(5)
 end
 
 def songs_no_listen
@@ -180,8 +185,16 @@ def cli_most_played_song
     
 end
 
+def end_program
+    puts "\n\n*********************\n\n"    
+    print "Bye Felecia"    
+    puts "\n\n*********************\n\n"    
+    
+end
+
 
 def run 
+    puts "\n\n*********************\n\n"    
     print "Welcome to our Spotify Project.\nEnter your Username: "
     username = gets.capitalize.strip
     current_user = User.find_by(name: username)
@@ -214,8 +227,10 @@ def run
             display_playlists(current_user)
         when '3'
             most_pop_list_no_follow(current_user)
+        when '4'
+            cli_most_danceable_list(current_user)
         when '7'
-            puts "Bye"
+            end_program
             break
         else
             help
