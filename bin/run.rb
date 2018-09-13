@@ -177,7 +177,7 @@ def cli_most_danceable_list (user)
     sleep(5)
 end
 
-def songs_no_listen
+def songs_no_listen (user)
     
 end
 
@@ -229,6 +229,8 @@ def run
             most_pop_list_no_follow(current_user)
         when '4'
             cli_most_danceable_list(current_user)
+        when '5'
+            songs_no_listen(current_user)
         when '7'
             end_program
             break
