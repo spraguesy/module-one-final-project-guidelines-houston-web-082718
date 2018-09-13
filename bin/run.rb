@@ -103,19 +103,41 @@ end
 
 def cli_play_song (user, song_name, song_artist)
     puts "\n\n*********************\n\n"
-    puts "Now playing #{song_name} by #{song_artist}."
+    
     found_song = Song.find_by(name: song_name)
     if found_song == nil
-        Song.add_song(song_name)
-        found_song = Song.find_by(name: song_name)
+        added_song = Song.add_song(song_name)
+        if added_song =! nil
+            found_song = Song.find_by(name: song_name)
+            user.play_song(found_song)
+        else
+            puts "Ahh I can't find that song"
+            cli_play_song
+        end 
     end
-    user.play_song(found_song)
+    
+    puts "Now playing #{song_name} by #{song_artist}."
+
+
     fetcher = Lyricfy::Fetcher.new(:wikia)
     song = fetcher.search "#{song_artist}", "#{song_name}"
     song.lines.each do |line|
         puts line
         sleep(0.2)
     end
+    puts "\n\n*********************\n\n"
+
+    # print "That was my jam. Do you want to add that song to a playlist? "
+
+    # add_to_playist = gets.downcase
+
+    # if add_to_playist == 'y' || add_to_playist == 'yes'
+    #     puts 'Which playlist would you like to add it to? '
+    #     user.my_playlists.each do |playlist|
+    #         puts "#{user.my_playlists.index(playlist)+1} - #{playlist.name}"
+    #     end
+    # end
+
     puts "\n\n*********************\n\n"
 end
 
@@ -160,7 +182,7 @@ end
 
 
 def run 
-    puts "Welcome to our Spotify Project.\nEnter your Username: "
+    print "Welcome to our Spotify Project.\nEnter your Username: "
     username = gets.capitalize.strip
     current_user = User.find_by(name: username)
     if current_user == nil

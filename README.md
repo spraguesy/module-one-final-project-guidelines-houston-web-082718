@@ -98,3 +98,7 @@ CLI
             i) Add this song to a playlist? (y/n)
                 1) If yes, what playlist, or new playlist?
                 2) What is the new playlist name?
+
+
+Current Problems: 
+    If you mispell a song. Spotify API can still find the match, but the song name isn't corret. So it gets added as a song, but within our app we can't find it again because it is the incorrect name.
