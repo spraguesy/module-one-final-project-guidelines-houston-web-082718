@@ -127,16 +127,22 @@ def cli_play_song (user, song_name, song_artist)
     end
     puts "\n\n*********************\n\n"
 
-    # print "That was my jam. Do you want to add that song to a playlist? "
+    print "That was my jam. Do you want to add that song to a playlist?\n "
 
-    # add_to_playist = gets.downcase
+    add_to_playist = gets.downcase.chomp
 
-    # if add_to_playist == 'y' || add_to_playist == 'yes'
-    #     puts 'Which playlist would you like to add it to? '
-    #     user.my_playlists.each do |playlist|
-    #         puts "#{user.my_playlists.index(playlist)+1} - #{playlist.name}"
-    #     end
-    # end
+    if add_to_playist == 'y' || add_to_playist == 'yes'
+        puts "Here is a list of your playlists."
+        
+        user.all_playlists.each do |playlist|
+            puts "#{user.all_playlists.index(playlist)+1} - #{playlist.name}"
+        end
+        print 'Which playlist would you like to add it to? '
+
+        playlist_number = gets.chomp
+
+        
+    end
 
     puts "\n\n*********************\n\n"
 end
