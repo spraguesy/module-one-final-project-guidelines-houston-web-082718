@@ -35,9 +35,10 @@ class User < ActiveRecord::Base
    end
 
    def songs_not_listened_to_from(playlist)
-        playlist.songs.select do|song|
+        songs = playlist.songs.select do|song|
             self.songs.include?(song) == false
         end 
+        songs
    end
 
    def most_played_song

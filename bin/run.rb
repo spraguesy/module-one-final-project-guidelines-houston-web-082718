@@ -87,6 +87,8 @@ User.first.play_song(Song.all.third)
 User.second.play_song(Song.all.first)
 User.second.play_song(Song.all.third)
 
+# binding.pry
+
 def help
     help = <<-HELP 
         1 - Play a song
@@ -105,6 +107,7 @@ def cli_play_song (user, song_name, song_artist)
     puts "\n\n*********************\n\n"
     
     found_song = Song.find_by(name: song_name)
+    # binding.pry
     if found_song == nil
         added_song = Song.add_song(song_name)
         if added_song =! nil
@@ -114,7 +117,11 @@ def cli_play_song (user, song_name, song_artist)
             puts "Ahh I can't find that song"
             cli_play_song
         end 
+    else
+        user.play_song(found_song)
     end
+
+    # binding.pry
     
     puts "\n\nNow playing #{song_name} by #{song_artist}.\n\n"
 
@@ -186,12 +193,12 @@ def songs_no_listen (user)
     playlist_num = gets.chomp
 
     not_listened_to = user.songs_not_listened_to_from(user.all_playlists[playlist_num.to_i-1])
-
+    
+    puts "Here are the song's you haven't listened to on this playlist:\n"
     not_listened_to.each do |song|
         puts "#{not_listened_to.index(song)+1}. #{song.artist.name} - #{song.name} "
     end
 
-    puts "Here are the song's you haven't listened to on this playlist"
 
 end
 
@@ -237,6 +244,7 @@ def run
             print "Who is the Artist? "
             song_artist = gets.chomp.strip
             cli_play_song(current_user, song_name, song_artist)
+            # binding.pry
         when '2'
             display_playlists(current_user)
         when '3'
