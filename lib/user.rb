@@ -35,10 +35,11 @@ class User < ActiveRecord::Base
    end
 
    def songs_not_listened_to_from(playlist)
-        songs = playlist.songs.select do|song|
+
+        no_listen = playlist.songs.select do|song|
             self.songs.include?(song) == false
         end 
-        songs
+        no_listen
    end
 
    def most_played_songs
@@ -50,12 +51,12 @@ class User < ActiveRecord::Base
                 most_played[song] = 1
             end
         end
-        songs = []
+        most_played_songs_array = []
         most_played.each do |key, value|
-            song = {:song => key, :count => value}
-            songs << song
+            song_hash = {:song => key, :count => value}
+            most_played_songs_array << song_hash
         end
-        songs.sort{|x,y| y[:count] <=> x[:count]}
+        most_played_songs_array.sort{|x,y| y[:count] <=> x[:count]}
    end 
 
    def most_danceable

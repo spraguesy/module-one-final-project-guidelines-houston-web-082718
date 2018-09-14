@@ -112,6 +112,7 @@ def cli_play_song (user, song_name, song_artist)
     if found_song == nil
         added_song = Song.add_song(song_name)
         found_song = added_song
+        user.play_song(found_song)
         if added_song.artist.name != song_artist
             cant_find
             puts "\n\n*********************\n\n"
@@ -187,7 +188,6 @@ def display_playlists (user)
     puts "\n\n*********************\n\n"
     puts "Here are your playlists.\n\n"
     my_playlists = user.all_playlists
-    binding.pry
     my_playlists.each do |playlist|
 
         if user.owns?(playlist)
@@ -258,6 +258,7 @@ end
 
 def cli_most_played_songs (user)
     puts "\n\n*********************\n\n"
+    binding.pry
     songs = user.most_played_songs
     if (songs.length < 5) && (songs.length > 0)
         songs.length.times do |index|
@@ -330,8 +331,6 @@ def run
         end
     end
 end
-
-# binding.pry
 
 run
 
