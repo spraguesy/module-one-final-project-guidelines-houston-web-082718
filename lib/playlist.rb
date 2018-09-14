@@ -11,7 +11,15 @@ class Playlist < ActiveRecord::Base
     alias_attribute :followers, :users
 
     def add_song_to_playlist(song)
-        PlaylistSong.create(song_id:song.id, playlist_id: self.id)
+
+        # PlaylistSong.find_or_create_by(song_id: song.id, playlist_id: self.id)
+        test_song = PlaylistSong.where(song_id: song.id, playlist_id: self.id)
+
+        if test_song.length == 0
+            PlaylistSong.create(song_id: song.id, playlist_id: self.id)
+            puts "added to #{self.id}"
+        end
+
     end 
 
     def average_danceability

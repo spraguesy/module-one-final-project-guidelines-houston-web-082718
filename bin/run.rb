@@ -6,6 +6,8 @@ Follow.destroy_all
 Song.destroy_all
 Artist.destroy_all
 Play.destroy_all
+PlaylistSong.destroy_all
+
 
 # Playlist.create(name: "90s", user_id:1)
 # User.create(name: "Andrew")
@@ -89,12 +91,14 @@ User.second.play_song(Song.all.third)
 
 def help
     help = <<-HELP 
+    What do you want to do?
+
         1 - Play a song
         2 - Display your playlists
         3 - Find most popular playlist I don't follow
         4 - Find my most danceable playlist
         5 - Find songs I haven't listened to
-        6 - Find my most played song
+        6 - Find my most played songs
         7 - Exit
     HELP
 
@@ -103,43 +107,75 @@ end
 
 def cli_play_song (user, song_name, song_artist)
     puts "\n\n*********************\n\n"
-    
+
     found_song = Song.find_by(name: song_name)
     if found_song == nil
         added_song = Song.add_song(song_name)
-        if added_song =! nil
-            found_song = Song.find_by(name: song_name)
-            user.play_song(found_song)
-        else
-            puts "Ahh I can't find that song"
-            cli_play_song
-        end 
+        found_song = added_song
+        if added_song.artist.name != song_artist
+            cant_find
+            puts "\n\n*********************\n\n"
+
+            return
+        end
+        # if added_song =! nil
+        #     found_song = Song.find_by(name: song_name)
+        #     user.play_song(found_song)
+        # else
+        #     puts "\n\n*********************\n\n"
+
+        #     puts "Ahh I can't find that song"
+        #     puts "\n\n*********************\n\n"
+
+        #     # cli_play_song
+        # end 
+    else
+        user.play_song(found_song)
     end
+
     
-    puts "Now playing #{song_name} by #{song_artist}."
+    puts "\n\nNow playing #{song_name} by #{song_artist}.\n\n"
 
 
     fetcher = Lyricfy::Fetcher.new(:wikia)
     song = fetcher.search "#{song_artist}", "#{song_name}"
     song.lines.each do |line|
         puts line
-        sleep(0.2)
+        # sleep(0.3)
     end
     puts "\n\n*********************\n\n"
 
-    print "That was my jam. Do you want to add that song to a playlist?\n "
+    print "That was my jam. Do you want to add that song to a playlist? (yes/no)\n "
 
     add_to_playist = gets.downcase.chomp
 
     if add_to_playist == 'y' || add_to_playist == 'yes'
-        puts "Here is a list of your playlists."
-        
-        user.all_playlists.each do |playlist|
-            puts "#{user.all_playlists.index(playlist)+1} - #{playlist.name}"
-        end
-        print 'Which playlist would you like to add it to? '
 
-        playlist_number = gets.chomp
+        if user.my_playlists.length > 0
+            puts "Here is a list of your playlists."
+            
+            user.my_playlists.each do |playlist|
+                puts "#{user.my_playlists.index(playlist)+1} - #{playlist.name}"
+            end
+            print 'Which playlist would you like to add it to? '
+    
+            playlist_number = gets.chomp
+    
+    
+    
+            user.my_playlists[playlist_number.to_i-1].add_song_to_playlist(found_song)
+
+
+            
+        else
+            puts "\n\n*********************\n\n"
+
+            puts "You don't own any playlists."
+
+            puts "\n\n*********************\n\n"
+
+        end
+
 
         
     end
@@ -149,23 +185,33 @@ end
 
 def display_playlists (user)
     puts "\n\n*********************\n\n"
-    puts "Here are your playlists.\n"
+    puts "Here are your playlists.\n\n"
     my_playlists = user.all_playlists
-
+    binding.pry
     my_playlists.each do |playlist|
+
         if user.owns?(playlist)
-            puts "#{playlist.name} (owner)"
+            puts "#{my_playlists.index(playlist)+1}. - #{playlist.name} (owner) #{playlist.id}"
+            print_playlist_songs(playlist)
         else
-            puts "#{playlist.name} (follower)"
+            puts "#{my_playlists.index(playlist)+1}. - #{playlist.name} (follower)#{playlist.id}"
+            print_playlist_songs(playlist)
         end
+        puts "\t"
     end
     puts "\n\n*********************\n\n"
+    sleep(3)
+end
+
+def print_playlist_songs (playlist)
+    playlist.songs.each do |song|
+        puts "\t#{playlist.songs.index(song)+1}. #{song.artist.name} - #{song.name}"
+    end
 end
 
 def most_pop_list_no_follow(user)
     puts "\n\n*********************\n\n"
-    binding.pry
-    puts "You don't follow #{user.find_new_popular_playlist.name}. It has #{user.find_new_popular_playlist.followers.size} follower(s)\n\nHere are the songs.\n\n"
+    puts "You don't follow #{user.find_new_popular_playlist.name}. It has #{user.find_new_popular_playlist.followers.size} #{user.find_new_popular_playlist.followers.size > 1 ? 'followers.' : 'follower.'}\n\nHere are the songs.\n\n"
 
     user.find_new_popular_playlist.songs.each do |song|
         puts "#{user.find_new_popular_playlist.songs.index(song)+1}. - #{song.name}"
@@ -174,20 +220,69 @@ def most_pop_list_no_follow(user)
     puts "\n\n*********************\n\n"
 end
 
-def cli_most_danceable_list
-    
+def cli_most_danceable_list (user)
+    puts "\n\n*********************\n\n"
+
+    md = user.most_danceable
+    puts "'#{md.name}' is your most danceable with #{(md.average_danceability*100).to_i}% danceability.\n\nNo one is watching..."
+    puts "\n\n*********************\n\n"
+    sleep(5)
 end
 
-def songs_no_listen
+def songs_no_listen (user)
+
+    puts "\n\n*********************\n\n"
+
+
+    display_playlists(user)
+
+    print "Which playlist do you want to see the songs you haven't listened to on? "
+
+    playlist_num = gets.chomp
+
+    not_listened_to = user.songs_not_listened_to_from(user.all_playlists[playlist_num.to_i-1])
     
+    puts "Here are the song's you haven't listened to on this playlist:\n"
+    not_listened_to.each do |song|
+        puts "#{not_listened_to.index(song)+1}. #{song.artist.name} - #{song.name} "
+    end
+
+    puts "\n\n*********************\n\n"
+
+
 end
 
-def cli_most_played_song
+def cant_find
+    print "Sorry, I can't find what you are looking for" 
+end
+
+def cli_most_played_songs (user)
+    puts "\n\n*********************\n\n"
+    songs = user.most_played_songs
+    if (songs.length < 5) && (songs.length > 0)
+        songs.length.times do |index|
+            puts "#{index+1}. #{songs[index][:song].name} by #{songs[index][:song].artist.name} - Listened #{songs[index][:count]} #{songs[index][:count]>1 ? 'times.' : 'time.'}"
+        end 
+    elsif songs.length > 5
+        5.times do |index|
+            puts "#{index+1}. #{songs[index][:song].name} By #{songs[index][:song].artist.name} - Listened #{songs[index][:count]} times."
+        end 
+    else
+        puts "You haven't played any songs."
+    end 
+    puts "\n*********************\n\n"
+end
+
+def end_program
+    puts "\n\n*********************\n\n"    
+    print "Bye Felicia"    
+    puts "\n\n*********************\n\n"    
     
 end
 
 
 def run 
+    puts "\n\n*********************\n\n"    
     print "Welcome to our Spotify Project.\nEnter your Username: "
     username = gets.capitalize.strip
     current_user = User.find_by(name: username)
@@ -204,10 +299,11 @@ def run
         
     end
     puts "\n\n"
-    puts "Hey #{current_user.name}. Here is what you can do.\n\n"
+    puts "Hey #{current_user.name}.\n\n"
     input = ""
     while input
         help
+        current_user = User.find_by(name: username)
         input = gets.chomp
         case input
         when '1'
@@ -220,8 +316,14 @@ def run
             display_playlists(current_user)
         when '3'
             most_pop_list_no_follow(current_user)
+        when '4'
+            cli_most_danceable_list(current_user)
+        when '5'
+            songs_no_listen(current_user)
+        when '6'
+            cli_most_played_songs(current_user)
         when '7'
-            puts "Bye"
+            end_program
             break
         else
             help

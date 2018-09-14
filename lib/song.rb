@@ -10,10 +10,11 @@ class Song < ActiveRecord::Base
         new_song_array = RSpotify::Track.search(name, limit:1)
         new_song = new_song_array.first
         artist = new_song.artists.first
-        self.create(name: new_song.name, popularity: new_song.popularity, danceability: new_song.audio_features.danceability, artist_id: artist.id)
+        song = self.create(name: new_song.name, popularity: new_song.popularity, danceability: new_song.audio_features.danceability, artist_id: artist.id)
 
         #create artist portion
         Artist.create_with(name: artist.name, popularity: artist.popularity).find_or_create_by(id: artist.id)
+        song
     end
 
 end
